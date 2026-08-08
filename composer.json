@@ -1,0 +1,23 @@
+{
+    "name": "martin3r/platform-tour",
+    "description": "Regie — geführte Touren / Onboarding-Walkthroughs für die Plattform (Presenter-getrieben, teilbar per Link).",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Platform\\Tour\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Platform\\Tour\\TourServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
