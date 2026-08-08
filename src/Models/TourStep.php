@@ -12,10 +12,12 @@ class TourStep extends Model
 {
     protected $fillable = [
         'tour_id', 'position', 'navigate_url', 'title', 'message', 'highlight_selector',
+        'action_tool', 'action_arguments',
     ];
 
     protected $casts = [
-        'position' => 'integer',
+        'position'         => 'integer',
+        'action_arguments' => 'array',
     ];
 
     protected static function booted(): void

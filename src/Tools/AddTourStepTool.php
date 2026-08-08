@@ -33,6 +33,8 @@ class AddTourStepTool implements ToolContract, ToolMetadataContract
                 'navigate' => ['type' => 'string', 'description' => 'Optionaler Zielpfad für diesen Schritt.'],
                 'title'    => ['type' => 'string', 'description' => 'Optionale Überschrift.'],
                 'position' => ['type' => 'integer', 'description' => 'Optionale Reihenfolge (Default: ans Ende).'],
+                'action_tool'      => ['type' => 'string', 'description' => 'Optional: Tool, das beim "Weiter" von diesem Schritt im Kontext des Zuschauers ausgeführt wird (z.B. "planner.tasks.POST"). Nur additive/sichere Aktionen.'],
+                'action_arguments' => ['type' => 'object', 'description' => 'Optional: Argumente für action_tool (JSON-Objekt).'],
             ],
             'required' => ['tour_id', 'message'],
         ];
@@ -66,6 +68,8 @@ class AddTourStepTool implements ToolContract, ToolMetadataContract
             'navigate_url'       => isset($arguments['navigate']) && $arguments['navigate'] !== '' ? (string) $arguments['navigate'] : null,
             'title'              => isset($arguments['title']) && $arguments['title'] !== '' ? (string) $arguments['title'] : null,
             'message'            => $message,
+            'action_tool'        => isset($arguments['action_tool']) && $arguments['action_tool'] !== '' ? (string) $arguments['action_tool'] : null,
+            'action_arguments'   => isset($arguments['action_arguments']) && is_array($arguments['action_arguments']) ? $arguments['action_arguments'] : null,
         ]);
 
         return ToolResult::success([

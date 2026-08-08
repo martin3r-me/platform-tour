@@ -23,6 +23,9 @@ class Tour extends Model
             if (empty($tour->uuid)) {
                 $tour->uuid = (string) Str::uuid();
             }
+            if (empty($tour->share_token)) {
+                $tour->share_token = Str::random(40);
+            }
         });
     }
 

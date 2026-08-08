@@ -52,13 +52,44 @@ class TourProvider implements PresenterTourProvider
             return;
         }
 
-        $total = TourStep::where('tour_id', $run->tour_id)->count();
-        $next  = (int) $run->current_position + 1;
+        $steps = TourStep::where('tour_id', $run->tour_id)->orderBy('position')->get();
+        $total = $steps->count();
+        $idx   = max(1, (int) $run->current_position);
 
+        // Aktion des aktuellen (jetzt verlassenen) Schritts ausführen — im Kontext des Zuschauers.
+        $this->runStepAction($steps[$idx - 1] ?? null);
+
+        $next = $idx + 1;
         if ($next > $total) {
             $run->update(['status' => 'done']);
         } else {
             $run->update(['current_position' => $next]);
+        }
+    }
+
+    /**
+     * Führt die optionale Aktion eines Schritts aus (ein Tool im Kontext des eingeloggten
+     * Zuschauers). Additive/sichere Aktionen; Fehler werden geloggt, brechen die Tour nicht ab.
+     */
+    protected function runStepAction(?TourStep $step): void
+    {
+        if (!$step || empty($step->action_tool)) {
+            return;
+        }
+
+        try {
+            $registry = app(\Platform\Core\Tools\ToolRegistry::class);
+            if ($registry->has($step->action_tool)) {
+                $registry->get($step->action_tool)->execute(
+                    is_array($step->action_arguments) ? $step->action_arguments : [],
+                    \Platform\Core\Contracts\ToolContext::fromAuth()
+                );
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Tour: step action failed', [
+                'tool'  => $step->action_tool,
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 

@@ -21,11 +21,34 @@
         @else
             <x-nx-card flush class="divide-y divide-[color:var(--nx-line)]">
                 @foreach($tours as $t)
-                    <x-nx-list-item
-                        icon="heroicon-o-film"
-                        :title="$t->name"
-                        :subtitle="$t->description"
-                        :meta="$t->steps_count.' Schritte · '.$t->status" />
+                    <div class="flex items-center justify-between gap-3 p-4">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                @svg('heroicon-o-film', 'w-4 h-4 text-[color:var(--nx-muted)] shrink-0')
+                                <span class="text-sm font-medium text-[color:var(--nx-text)]">{{ $t->name }}</span>
+                                <span class="text-xs text-[color:var(--nx-faint)] tabular-nums">{{ $t->steps_count }} Schritte · {{ $t->status }}</span>
+                            </div>
+                            @if($t->description)
+                                <div class="mt-0.5 text-xs text-[color:var(--nx-muted)]">{{ $t->description }}</div>
+                            @endif
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            @if($t->share_token)
+                                <button type="button"
+                                        x-data="{ copied: false }"
+                                        @click="navigator.clipboard.writeText('{{ url('/tour/s/'.$t->share_token) }}'); copied = true; setTimeout(() => copied = false, 1500)"
+                                        class="text-xs text-[color:var(--nx-accent)] hover:underline">
+                                    <span x-show="!copied">Link kopieren</span>
+                                    <span x-show="copied" x-cloak>Kopiert ✓</span>
+                                </button>
+                            @endif
+                            @if($t->steps_count > 0)
+                                <x-nx-button variant="primary" size="sm" wire:click="start({{ $t->id }})">
+                                    @svg('heroicon-o-play', 'w-4 h-4') <span>Starten</span>
+                                </x-nx-button>
+                            @endif
+                        </div>
+                    </div>
                 @endforeach
             </x-nx-card>
         @endif
