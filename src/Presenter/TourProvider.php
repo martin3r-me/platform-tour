@@ -35,13 +35,14 @@ class TourProvider implements PresenterTourProvider
         $step = $steps[$idx - 1];
 
         return [
-            'title'    => $step->title,
-            'message'  => (string) $step->message,
-            'navigate' => $step->navigate_url,
-            'speaker'  => 'Claude',
-            'position' => $idx,
-            'total'    => $total,
-            'is_last'  => $idx >= $total,
+            'title'     => $step->title,
+            'message'   => (string) $step->message,
+            'navigate'  => $step->navigate_url,
+            'highlight' => $step->highlight_selector,
+            'speaker'   => 'Claude',
+            'position'  => $idx,
+            'total'     => $total,
+            'is_last'   => $idx >= $total,
         ];
     }
 

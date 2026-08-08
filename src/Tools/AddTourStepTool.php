@@ -35,6 +35,7 @@ class AddTourStepTool implements ToolContract, ToolMetadataContract
                 'position' => ['type' => 'integer', 'description' => 'Optionale Reihenfolge (Default: ans Ende).'],
                 'action_tool'      => ['type' => 'string', 'description' => 'Optional: Tool, das beim "Weiter" von diesem Schritt im Kontext des Zuschauers ausgeführt wird (z.B. "planner.tasks.POST"). Nur additive/sichere Aktionen.'],
                 'action_arguments' => ['type' => 'object', 'description' => 'Optional: Argumente für action_tool (JSON-Objekt).'],
+                'highlight'        => ['type' => 'string', 'description' => 'Optional: Element hervorheben (Spotlight). Formen: "text:Neue Aufgabe" (Text-Match, robust), "[data-tour=\'x\']" oder ein CSS-Selektor.'],
             ],
             'required' => ['tour_id', 'message'],
         ];
@@ -68,6 +69,7 @@ class AddTourStepTool implements ToolContract, ToolMetadataContract
             'navigate_url'       => isset($arguments['navigate']) && $arguments['navigate'] !== '' ? (string) $arguments['navigate'] : null,
             'title'              => isset($arguments['title']) && $arguments['title'] !== '' ? (string) $arguments['title'] : null,
             'message'            => $message,
+            'highlight_selector' => isset($arguments['highlight']) && $arguments['highlight'] !== '' ? (string) $arguments['highlight'] : null,
             'action_tool'        => isset($arguments['action_tool']) && $arguments['action_tool'] !== '' ? (string) $arguments['action_tool'] : null,
             'action_arguments'   => isset($arguments['action_arguments']) && is_array($arguments['action_arguments']) ? $arguments['action_arguments'] : null,
         ]);
