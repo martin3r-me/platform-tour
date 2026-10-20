@@ -3,7 +3,6 @@
 namespace Platform\Tour;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
@@ -35,7 +34,7 @@ class TourServiceProvider extends ServiceProvider
         if (
             config()->has('tour.routing') &&
             config()->has('tour.navigation') &&
-            Schema::hasTable('modules')
+            PlatformCore::modulesTableExists()
         ) {
             PlatformCore::registerModule([
                 'key'        => 'tour',
